@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Farmers - Welcome</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Slider Styling */
+.slider {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+.slides {
+    display: flex;
+    width: 200%;
+    animation: scroll 20s linear infinite;
+}
+
+.slides img {
+    width: 50%;
+    height: 100vh;
+    object-fit: cover;
+}
+
+/* Continuous Sliding Effect */
+@keyframes scroll {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Overlay to Center Text */
+.overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5); /* Dark transparent background */
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.buttons {
+    margin-top: 10px;
+}
+
+.btn {
+    text-decoration: none;
+    background-color: #2E8B57;
+    color: white;
+    padding: 12px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.btn:hover {
+    background-color: #1E5F37;
+}
+
+</style>
+<body>
+    <div class="slider">
+        <div class="slides">
+            <img src="images/farmer1.jpg" alt="Farmer with cow">
+            <img src="images/farmer2.jpg" alt="Farmer with sheep">
+            <img src="images/farmer3.jpg" alt="Farmer feeding chicken">
+            <img src="images/farmer4.jpg" alt="Farmer in a field">
+            <!-- Duplicate images for smooth infinite scrolling -->
+            <img src="images/farmer1.jpg" alt="Farmer with cow">
+            <img src="images/farmer2.jpg" alt="Farmer with sheep">
+            <img src="images/farmer3.jpg" alt="Farmer feeding chicken">
+            <img src="images/farmer4.jpg" alt="Farmer in a field">
+        </div>
+        <div class="overlay">
+            <h1>Welcome to Happy Farmers</h1>
+            <p>Connecting Farmers with Veterinary Doctors</p>
+            <div class="buttons">
+                <a href="register.html" class="btn">Register</a>
+                 <a href="login.html" class="btn">Login</a>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>

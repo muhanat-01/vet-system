@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vets Available</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<style>
+     body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #228B22;
+            color: white;
+            height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            width: 80px;
+            height: auto;
+        }
+        .sidebar h2 {
+            font-size: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .menu, .bottom-menu {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+        }
+        .menu li, .bottom-menu li {
+            padding: 15px 10px;
+            cursor: pointer;
+            font-size: 18px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+        }
+        .menu li i, .bottom-menu li i {
+            margin-right: 10px;
+        }
+        .menu li:hover, .bottom-menu li:hover {
+            background-color: #1e7e34;
+            border-radius: 5px;
+        }
+        .menu li a, .bottom-menu li a {
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .separator {
+            border-top: 1px solid white;
+            width: 100%;
+            margin: 20px 0;
+        }
+        .bottom-menu {
+            margin-top: 20px;
+        }
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+         .dashboard-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            width: 30%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .stat-box h3 {
+            margin: 5px 0;
+        }
+</style>
+<body>
+   <div class="sidebar">
+        <div>
+            <div class="logo">
+                <img src="images/farm.jpg" alt="Logo">
+            </div>
+            <h2><span style="font-weight:bold; color: yellow;">Happy Farmer</span></h2>
+            <ul class="menu">
+                <li><a href="farmer_dashboard.html"><i class="fas fa-home"></i>Home</a></li>
+                <li><a href="find_vet.html"><i class="fas fa-map-marker-alt"></i>Find Vet</a></li>
+                <li><a href="my_requests.html"><i class="fas fa-clipboard-list"></i>My Requests</a></li>
+                <li><a href="my_profile.html"><i class="fas fa-user"></i>My Profile</a></li>
+            </ul>
+        </div>
+        <div>
+            <div class="separator"></div>
+            <ul class="bottom-menu">
+                <li><a href="#"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
+                <li><a href="#"><i class="fas fa-bell"></i>Notifications</a></li>
+                <li><a href="#"><i class="fas fa-headset"></i>Support</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="content">
+        <h1>Vets Available</h1>
+        <div class="vet-list" id="vet-list">
+            <!-- Dynamic Vet Cards Will Be Inserted Here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetchVets();
+        });
+
+        function fetchVets() {
+            const params = new URLSearchParams(window.location.search);
+            const queryString = params.toString() ? '?' + params.toString() : '';
+
+            fetch('get_vets.php' + queryString)
+                .then(response => response.json())
+                .then(data => {
+                    let vetList = document.getElementById("vet-list");
+                    vetList.innerHTML = "";
+
+                    if (data.length === 0) {
+                        vetList.innerHTML = "<p>No vets available at the moment.</p>";
+                        return;
+                    }
+
+                    data.forEach(vet => {
+                        let vetCard = `
+                            <div class="vet-card">
+                                <i class="fa-solid fa-user-circle fa-3x"></i>
+                                <p>${vet.name} <br> ${vet.speciality} <br> ${vet.location} <br> ${vet.status}</p>
+                               
+                            </div>
+                        `;
+                        vetList.innerHTML += vetCard;
+                    });
+                })
+                .catch(error => console.error('Error fetching vets:', error));
+        }
+
+        function requestVet(vetId) {
+            alert("Request sent to Vet ID: " + vetId);
+        }
+    </script>
+</body>
+</html>

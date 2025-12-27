@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('images/farmer1.jpg') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: green;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: darkgreen;
+        }
+
+        #speciality-container {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Register</h2>
+        <form action="register.php" method="POST" class="register-form" enctype="multipart/form-data">
+            <label for="register_role">Select Role:</label>
+            <select name="register_role" id="register_role" required>
+                <option value="farmer">Farmer</option>
+                <option value="vet">Vet</option>
+            </select>
+
+            <div id="speciality-container">
+                <label for="speciality">Speciality:</label>
+                <select id="speciality" name="speciality">
+                    <option value="">All Speciality</option>
+                    <option value="Large Animals">Large Animals</option>
+                    <option value="Small Animals">Small Animals</option>
+                    <option value="Poultry">Poultry</option>
+                    <option value="Dairy">Dairy</option>
+                </select>
+            </div>
+
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="contact">Phone Number:</label>
+            <input type="text" id="contact" name="contact" required>
+
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" required>
+
+            <label for="register_password">Password:</label>
+            <input type="password" id="register_password" name="register_password" required>
+
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location">
+
+            <button type="submit">Register</button>
+            <p>Already have an account? <a href="login.html">Login</a></p>
+        </form>
+    </div>
+
+    <script>
+        const roleSelect = document.getElementById("register_role");
+        const specialityContainer = document.getElementById("speciality-container");
+
+        // Function to toggle visibility of speciality based on role
+        function toggleSpeciality() {
+            if (roleSelect.value === "vet") {
+                specialityContainer.style.display = "block";
+            } else {
+                specialityContainer.style.display = "none";
+            }
+        }
+
+        // Trigger on page load and on role change
+        window.addEventListener("DOMContentLoaded", toggleSpeciality);
+        roleSelect.addEventListener("change", toggleSpeciality);
+    </script>
+</body>
+</html>

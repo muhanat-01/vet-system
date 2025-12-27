@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Character encoding -->
+    <meta charset="UTF-8">
+
+    <!-- Responsive viewport for mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Page title -->
+    <title>Farmer Dashboard</title>
+
+    <!-- Font Awesome icons -->
+    <link rel="stylesheet" href="fontawesome-free/css/all.min.css">
+
+    <style>
+        /* General page styling */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+        }
+
+        /* Sidebar container */
+        .sidebar {
+            width: 250px;
+            background-color: #228B22;
+            color: white;
+            height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Logo section */
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Logo image size */
+        .logo img {
+            width: 80px;
+            height: auto;
+        }
+
+        /* Sidebar heading */
+        .sidebar h2 {
+            font-size: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Menu lists */
+        .menu, .bottom-menu {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+        }
+
+        /* Menu list items */
+        .menu li, .bottom-menu li {
+            padding: 15px 10px;
+            cursor: pointer;
+            font-size: 18px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Icons inside menu items */
+        .menu li i, .bottom-menu li i {
+            margin-right: 10px;
+        }
+
+        /* Hover effect for menu items */
+        .menu li:hover, .bottom-menu li:hover {
+            background-color: #1e7e34;
+            border-radius: 5px;
+        }
+
+        /* Menu links styling */
+        .menu li a, .bottom-menu li a {
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Separator line */
+        .separator {
+            border-top: 1px solid white;
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        /* Main content area */
+        .content {
+            flex-grow: 1;
+            padding: 40px;
+            background-color: #f5f5f5;
+        }
+
+        /* Main headings */
+        .content h1 {
+            color: #333;
+        }
+
+        /* Quote styling */
+        .quote {
+            background-color: #dff0d8;
+            color: #3c763d;
+            border-left: 5px solid #4cae4c;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-style: italic;
+            margin-top: 20px;
+            max-width: 600px;
+        }
+
+        /* Floating AI widget container */
+        #ai-widget-floating {
+            position: fixed;
+            bottom: 50px;
+            right: 10px;
+            width: 560px;
+            font-family: Arial, sans-serif;
+            z-index: 1000;
+        }
+
+        /* AI chat box (hidden initially) */
+        #ai-chat-box {
+            display: none;
+            flex-direction: column;
+            height: 700px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        /* Messages container */
+        #ai-messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            border-bottom: 1px solid #eee;
+            scroll-behavior: smooth;
+        }
+
+        /* Chat input field */
+        #ai-input {
+            padding: 10px;
+            border: none;
+            outline: none;
+            width: calc(100% - 20px);
+            box-sizing: border-box;
+            font-size: 18px;
+        }
+
+        /* Send button */
+        #ai-send {
+            padding: 10px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            width: 100%;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Send button hover */
+        #ai-send:hover {
+            background-color: #218838;
+        }
+
+        /* Chat message bubble */
+        .message {
+            margin-bottom: 10px;
+            padding: 10px 14px;
+            border-radius: 16px;
+            max-width: 90%;
+            word-wrap: break-word;
+            font-size: 19px;
+            line-height: 1.4;
+            display: inline-block;
+        }
+
+        /* User (farmer) message styling */
+        .message.user {
+            background-color: #DCF8C6;
+            align-self: flex-end;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-end;
+        }
+
+        /* Farmer icon */
+        .message.user::before {
+            content: "👨‍🌾";
+            margin-right: 8px;
+        }
+
+        /* AI message styling */
+        .message.ai {
+            background-color: #F1F0F0;
+            align-self: flex-start;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        /* AI icon */
+        .message.ai::before {
+            content: "🤖";
+            margin-right: 8px;
+        }
+
+        /* Floating toggle button */
+        #ai-toggle {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            background-color: #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 34px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: background-color 0.3s;
+        }
+
+        /* Toggle button hover */
+        #ai-toggle:hover {
+            background-color: #218838;
+        }
+
+        /* Notification badge */
+        #ai-notification {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: red;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Bounce animation for notification */
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-6px); }
+            60% { transform: translateY(-3px); }
+        }
+
+        #ai-toggle.bounce {
+            animation: bounce 0.6s;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar navigation -->
+    <div class="sidebar">
+        <div>
+            <!-- Logo -->
+            <div class="logo">
+                <img src="images/farm.jpg" alt="Logo">
+            </div>
+
+            <!-- System title -->
+            <h2><span style="font-weight:bold; color: yellow;">Happy Farmer</span></h2>
+
+            <!-- Main menu -->
+            <ul class="menu">
+                <li onclick="loadContent('home')">
+                    <a href="farmer_dashboard.html"><i class="fas fa-home"></i>Home</a>
+                </li>
+                <li onclick="loadContent('find-vet')">
+                    <a href="find_vet.html"><i class="fas fa-map-marker-alt"></i>Find Vet</a>
+                </li>
+                <li onclick="loadContent('profile')">
+                    <a href="my_profile.php"><i class="fas fa-user"></i>My Profile</a>
+                </li>
+            </ul>
+        </div>
+
+        <div>
+            <!-- Separator line -->
+            <div class="separator"></div>
+
+            <!-- Bottom menu -->
+            <ul class="bottom-menu">
+                <li onclick="loadContent('logout')">
+                    <a href="../login.html"><i class="fas fa-sign-out-alt"></i>Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main dashboard content -->
+    <div class="content" id="main-content">
+        <h1>Welcome to the Farmer Dashboard</h1>
+        <h1>Welcome Back</h1>
+        <p>Here’s your farm’s pulse at a glance.</p>
+        <div class="quote">
+            “Farming is the backbone of life—let’s keep it strong!”
+        </div>
+    </div>
+
+    <!-- Floating AI Chat Widget -->
+    <div id="ai-widget-floating">
+        <div id="ai-chat-box">
+            <div id="ai-messages"></div>
+            <input type="text" id="ai-input" placeholder="Ask me anything..." />
+            <button id="ai-send">Send</button>
+        </div>
+
+        <!-- Toggle chat button -->
+        <div id="ai-toggle">
+            💬
+            <span id="ai-notification" style="display:none;">•</span>
+        </div>
+    </div>
+
+    <script>
+        // Handles navigation between dashboard pages
+        function loadContent(page) {
+            if (page === "find-vet") {
+                window.location.href = "find_vet.html";
+            } else if (page === "profile") {
+                window.location.href = "my_profile.php";
+            } else if (page === "home") {
+                window.location.href = "farmer_dashboard.html";
+            } else if (page === "logout") {
+                window.location.href = "../login.html";
+            }
+        }
+
+        // DOM element references
+        const input = document.getElementById("ai-input");
+        const sendBtn = document.getElementById("ai-send");
+        const messages = document.getElementById("ai-messages");
+        const chatBox = document.getElementById("ai-chat-box");
+        const toggleBtn = document.getElementById("ai-toggle");
+        const notification = document.getElementById("ai-notification");
+
+        // Opens chat and shows welcome message
+        function openChat() {
+            chatBox.style.display = "flex";
+            input.focus();
+
+            if (messages.children.length === 0) {
+                const welcomeMsg = document.createElement("div");
+                welcomeMsg.classList.add("message", "ai");
+                welcomeMsg.textContent = "Hello, Farmer! I am your AI assistant. How can I be of help today?";
+                messages.appendChild(welcomeMsg);
+                scrollToBottom();
+            }
+        }
+
+        // Toggle chat open/close
+        toggleBtn.addEventListener("click", () => {
+            if (chatBox.style.display === "flex") {
+                chatBox.style.display = "none";
+            } else {
+                openChat();
+                notification.style.display = "none";
+            }
+        });
+
+        // Scrolls messages to the bottom
+        function scrollToBottom() {
+            messages.scrollTo({
+                top: messages.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        // Sends user message and fetches AI response
+        function sendMessage() {
+            const userText = input.value.trim();
+            if (!userText) return;
+
+            // Display user message
+            const userMsg = document.createElement("div");
+            userMsg.classList.add("message", "user");
+            userMsg.textContent = userText;
+            messages.appendChild(userMsg);
+            input.value = "";
+            scrollToBottom();
+
+            // Typing indicator
+            const typingMsg = document.createElement("div");
+            typingMsg.classList.add("message", "ai");
+            typingMsg.textContent = "AI is typing";
+            messages.appendChild(typingMsg);
+            scrollToBottom();
+
+            let dotCount = 0;
+            const dotInterval = setInterval(() => {
+                dotCount = (dotCount + 1) % 4;
+                typingMsg.textContent = "AI is typing" + ".".repeat(dotCount);
+                scrollToBottom();
+            }, 500);
+
+            // API request to Groq OpenAI-compatible endpoint
+            fetch("https://api.groq.com/openai/v1/responses", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer  "
+                    // qrod api key is put here
+                },
+                body: JSON.stringify({
+                    model: "openai/gpt-oss-20b",
+                    instructions: "Respond politely and in a friendly tone. Do not repeat the user input.",
+                    input: userText
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                clearInterval(dotInterval);
+                messages.removeChild(typingMsg);
+
+                const aiMsg = document.createElement("div");
+                aiMsg.classList.add("message", "ai");
+
+                // Extract AI response text
+                let textOutput = "";
+                if (data.output && Array.isArray(data.output) && data.output.length > 0) {
+                    textOutput = data.output
+                        .filter(item => item.type === "message" && item.content?.[0]?.text)
+                        .map(item => item.content[0].text)
+                        .join("");
+                }
+
+                aiMsg.textContent = textOutput || "No response from AI";
+                messages.appendChild(aiMsg);
+                scrollToBottom();
+
+                // Show notification if chat is closed
+                if (chatBox.style.display !== "flex") {
+                    notification.style.display = "flex";
+                    toggleBtn.classList.add("bounce");
+                    setTimeout(() => toggleBtn.classList.remove("bounce"), 600);
+                }
+            })
+            .catch(err => {
+                clearInterval(dotInterval);
+                messages.removeChild(typingMsg);
+
+                const errorMsg = document.createElement("div");
+                errorMsg.classList.add("message", "ai");
+                errorMsg.textContent = "Error contacting AI";
+                messages.appendChild(errorMsg);
+                scrollToBottom();
+                console.error(err);
+            });
+        }
+
+        // Send message on button click
+        sendBtn.addEventListener("click", sendMessage);
+
+        // Send message on Enter key press
+        input.addEventListener("keypress", function(e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
+
+</body>
+</html>
